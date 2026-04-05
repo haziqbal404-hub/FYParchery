@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "850125479678",
+    "project_id": "mental-state-archery",
+    "storage_bucket": "mental-state-archery.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850125479678:android:0986859c83d65c6e6c0faf",
+        "android_client_info": {
+          "package_name": "com.example.archery2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBofadgkFZmXfJUM3UIZJ5xuPnSEeb-E1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
