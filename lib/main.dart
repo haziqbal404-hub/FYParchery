@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:archery2/screens/auth/coach_signup_page.dart';
+import 'package:archery2/screens/auth/login_page.dart';
 
 void main() async {
   // This ensures all Flutter widgets are loaded before starting Firebase
@@ -23,8 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green, // Archery theme!
       ),
-      // For now, it will just show a blank screen with text
-      home: const CoachSignupPage(),
+      home: const LoginPage(),
     );
   }
 }
