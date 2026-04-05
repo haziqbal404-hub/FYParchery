@@ -1,3 +1,4 @@
+// lib/services/auth_service.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -5,8 +6,8 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-// Sign Up Coach
-  Future<String?> signUpCoach({
+  // Function to Register a Coach
+  Future<String?> registerCoach({
     required String email,
     required String password,
     required String name,
@@ -15,71 +16,31 @@ class AuthService {
     required String company,
     required String phone,
   }) async {
-    // ... logic remains same as provided in previous message
-
     try {
+      // 1. Create the user in Firebase Authentication
       UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      
-      await _db.collection('users').doc(result.user!.uid).set({
-        'uid': result.user!.uid,
-        'name': name,
-        'age': age,
-        'country': country,
-        'company': company,
-        'phone': phone,
-        'email': email,
-        'role': 'coach',
-      });
-      return null;
+        email: email,
+        password: password,
+      );
+
+      User? user = result.user;
+
+      // 2. Save the extra details (name, country, etc.) in Firestore
+      if (user != null) {
+        await _db.collection('users').doc(user.uid).set({
+          'uid': user.uid,
+          'name': name,
+          'email': email,
+          'age': age,
+          'country': country,
+          'company': company,
+          'phoneNumber': phone,
+          'role': 'coach', // We hardcode this so we know they are a coach
+        });
+      }
+      return null; // Return null if everything is successful
     } catch (e) {
-      return e.toString();
+      return e.toString(); // Return the error message if something fails
     }
   }
-
-  // Coach Registers a Student
-  // Note: This creates a record in Firestore. 
-  // In a real app, you'd use a Cloud Function to create the Auth account 
-  // without logging the coach out. For now, we store the student profile.
-  Future<String?> registerStudent({
-    required String email,
-    required String password,
-    required String name,
-    required String age,
-    required String gender,
-    required String level,
-    required String coachId,
-  }) async {
-    try {
-      // Create student record linked to this coach
-      DocumentReference studentDoc = _db.collection('users').doc(); 
-      await studentDoc.set({
-        'uid': studentDoc.id,
-        'name': name,
-        'age': age,
-        'gender': gender,
-        'level': level,
-        'email': email,
-        'password': password, // Stored so student can login later
-        'role': 'archer',
-        'coachId': coachId, // Linked to the coach who created them
-        'latestHz': 0.0,
-        'latestStatus': 'No Data',
-      });
-      return null;
-    } catch (e) {
-      return e.toString();
-    }
-  }
-
-  Future<String?> signIn(String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return null;
-    } catch (e) {
-      return e.toString();
-    }
-  }
-
-  void signOut() => _auth.signOut();
 }
